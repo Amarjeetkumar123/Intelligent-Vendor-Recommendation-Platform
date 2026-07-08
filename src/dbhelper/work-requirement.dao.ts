@@ -1,4 +1,4 @@
-import { Vendor } from '../models/index.js';
+import { WorkRequirement } from '../models/index.js';
 import { pool } from '../config/database.js';
 
 // ─── Helper: build WHERE clause from filter object ────────────────────────────
@@ -14,24 +14,25 @@ const buildWhereClause = <T extends object>(filters: T) => {
 
 // ─── CREATE ───────────────────────────────────────────────────────────────────
 
-export const saveVendor = async (vendorDetails: Vendor): Promise<Vendor> => {
+export const saveWorkRequirement = async (reqDetails: WorkRequirement): Promise<WorkRequirement> => {
     const queryText = `
-        INSERT INTO vendors
-            (name, vendor_type, category_id, email, mobile_number, rating, address, city, state, pincode)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        INSERT INTO work_requirements
+            (work_code, title, description, category_id, city, state, estimated_value, priority, expected_start_date, expected_end_date, created_by)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         RETURNING *
     `;
     const values = [
-        vendorDetails.name,
-        vendorDetails.vendor_type,
-        vendorDetails.category_id,
-        vendorDetails.email ?? null,
-        vendorDetails.mobile_number ?? null,
-        vendorDetails.rating ?? 0,
-        vendorDetails.address ?? null,
-        vendorDetails.city ?? null,
-        vendorDetails.state ?? null,
-        vendorDetails.pincode ?? null,
+        reqDetails.work_code,
+        reqDetails.title,
+        reqDetails.description ?? null,
+        reqDetails.category_id,
+        reqDetails.city ?? null,
+        reqDetails.state ?? null,
+        reqDetails.estimated_value ?? null,
+        reqDetails.priority ?? 'MEDIUM',
+        reqDetails.expected_start_date ?? null,
+        reqDetails.expected_end_date ?? null,
+        reqDetails.created_by,
     ];
     const result = await pool.query(queryText, values);
     return result.rows[0];
@@ -39,10 +40,10 @@ export const saveVendor = async (vendorDetails: Vendor): Promise<Vendor> => {
 
 // ─── READ ALL (with optional dynamic filters) ─────────────────────────────────
 
-export const getVendors = async (filters: Vendor = {}): Promise<Vendor[]> => {
+export const getWorkRequirements = async (filters: WorkRequirement = {}): Promise<WorkRequirement[]> => {
     const { clause, values } = buildWhereClause(filters);
     const result = await pool.query(
-        `SELECT * FROM vendors ${clause} ORDER BY id ASC`,
+        `SELECT * FROM work_requirements ${clause} ORDER BY id ASC`,
         values
     );
     return result.rows;
@@ -50,22 +51,22 @@ export const getVendors = async (filters: Vendor = {}): Promise<Vendor[]> => {
 
 // ─── READ ONE ─────────────────────────────────────────────────────────────────
 
-export const getVendorById = async (id: number): Promise<Vendor | null> => {
-    const result = await pool.query('SELECT * FROM vendors WHERE id = $1', [id]);
+export const getWorkRequirementById = async (id: number): Promise<WorkRequirement | null> => {
+    const result = await pool.query('SELECT * FROM work_requirements WHERE id = $1', [id]);
     return result.rows[0] ?? null;
 };
 
 // ─── UPDATE ───────────────────────────────────────────────────────────────────
 
-export const updateVendor = async (id: number, vendorDetails: Vendor): Promise<Vendor | null> => {
-    const fields = Object.keys(vendorDetails) as (keyof Vendor)[];
-    if (fields.length === 0) return getVendorById(id);
+export const updateWorkRequirement = async (id: number, reqDetails: WorkRequirement): Promise<WorkRequirement | null> => {
+    const fields = Object.keys(reqDetails) as (keyof WorkRequirement)[];
+    if (fields.length === 0) return getWorkRequirementById(id);
 
     const setClauses = fields.map((key, index) => `${String(key)} = $${index + 1}`);
-    const values = fields.map((key) => vendorDetails[key]);
+    const values = fields.map((key) => reqDetails[key]);
 
     const queryText = `
-        UPDATE vendors
+        UPDATE work_requirements
         SET ${setClauses.join(', ')}, updated_at = current_timestamp
         WHERE id = $${fields.length + 1}
         RETURNING *
@@ -76,7 +77,7 @@ export const updateVendor = async (id: number, vendorDetails: Vendor): Promise<V
 
 // ─── DELETE ───────────────────────────────────────────────────────────────────
 
-export const deleteVendor = async (id: number): Promise<Vendor | null> => {
-    const result = await pool.query('DELETE FROM vendors WHERE id = $1 RETURNING *', [id]);
+export const deleteWorkRequirement = async (id: number): Promise<WorkRequirement | null> => {
+    const result = await pool.query('DELETE FROM work_requirements WHERE id = $1 RETURNING *', [id]);
     return result.rows[0] ?? null;
 };

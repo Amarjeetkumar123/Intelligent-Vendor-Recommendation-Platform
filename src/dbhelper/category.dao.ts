@@ -1,4 +1,4 @@
-import { Vendor } from '../models/index.js';
+import { Category } from '../models/index.js';
 import { pool } from '../config/database.js';
 
 // ─── Helper: build WHERE clause from filter object ────────────────────────────
@@ -14,35 +14,22 @@ const buildWhereClause = <T extends object>(filters: T) => {
 
 // ─── CREATE ───────────────────────────────────────────────────────────────────
 
-export const saveVendor = async (vendorDetails: Vendor): Promise<Vendor> => {
+export const saveCategory = async (categoryDetails: Category): Promise<Category> => {
     const queryText = `
-        INSERT INTO vendors
-            (name, vendor_type, category_id, email, mobile_number, rating, address, city, state, pincode)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        INSERT INTO categories (name)
+        VALUES ($1)
         RETURNING *
     `;
-    const values = [
-        vendorDetails.name,
-        vendorDetails.vendor_type,
-        vendorDetails.category_id,
-        vendorDetails.email ?? null,
-        vendorDetails.mobile_number ?? null,
-        vendorDetails.rating ?? 0,
-        vendorDetails.address ?? null,
-        vendorDetails.city ?? null,
-        vendorDetails.state ?? null,
-        vendorDetails.pincode ?? null,
-    ];
-    const result = await pool.query(queryText, values);
+    const result = await pool.query(queryText, [categoryDetails.name]);
     return result.rows[0];
 };
 
 // ─── READ ALL (with optional dynamic filters) ─────────────────────────────────
 
-export const getVendors = async (filters: Vendor = {}): Promise<Vendor[]> => {
+export const getCategories = async (filters: Category = {}): Promise<Category[]> => {
     const { clause, values } = buildWhereClause(filters);
     const result = await pool.query(
-        `SELECT * FROM vendors ${clause} ORDER BY id ASC`,
+        `SELECT * FROM categories ${clause} ORDER BY id ASC`,
         values
     );
     return result.rows;
@@ -50,22 +37,22 @@ export const getVendors = async (filters: Vendor = {}): Promise<Vendor[]> => {
 
 // ─── READ ONE ─────────────────────────────────────────────────────────────────
 
-export const getVendorById = async (id: number): Promise<Vendor | null> => {
-    const result = await pool.query('SELECT * FROM vendors WHERE id = $1', [id]);
+export const getCategoryById = async (id: number): Promise<Category | null> => {
+    const result = await pool.query('SELECT * FROM categories WHERE id = $1', [id]);
     return result.rows[0] ?? null;
 };
 
 // ─── UPDATE ───────────────────────────────────────────────────────────────────
 
-export const updateVendor = async (id: number, vendorDetails: Vendor): Promise<Vendor | null> => {
-    const fields = Object.keys(vendorDetails) as (keyof Vendor)[];
-    if (fields.length === 0) return getVendorById(id);
+export const updateCategory = async (id: number, categoryDetails: Category): Promise<Category | null> => {
+    const fields = Object.keys(categoryDetails) as (keyof Category)[];
+    if (fields.length === 0) return getCategoryById(id);
 
     const setClauses = fields.map((key, index) => `${String(key)} = $${index + 1}`);
-    const values = fields.map((key) => vendorDetails[key]);
+    const values = fields.map((key) => categoryDetails[key]);
 
     const queryText = `
-        UPDATE vendors
+        UPDATE categories
         SET ${setClauses.join(', ')}, updated_at = current_timestamp
         WHERE id = $${fields.length + 1}
         RETURNING *
@@ -76,7 +63,7 @@ export const updateVendor = async (id: number, vendorDetails: Vendor): Promise<V
 
 // ─── DELETE ───────────────────────────────────────────────────────────────────
 
-export const deleteVendor = async (id: number): Promise<Vendor | null> => {
-    const result = await pool.query('DELETE FROM vendors WHERE id = $1 RETURNING *', [id]);
+export const deleteCategory = async (id: number): Promise<Category | null> => {
+    const result = await pool.query('DELETE FROM categories WHERE id = $1 RETURNING *', [id]);
     return result.rows[0] ?? null;
 };
