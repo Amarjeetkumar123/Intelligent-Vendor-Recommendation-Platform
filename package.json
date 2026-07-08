@@ -2,9 +2,14 @@
   "name": "vendor-recomendation",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon --exec 'node --loader ts-node/esm' src/index.ts",
+    "migrate:create": "node-pg-migrate create --migration-file-language=ts",
+    "migrate:up": "node-pg-migrate up",
+    "migrate:down": "node-pg-migrate down",
+    "migrate:redo": "node-pg-migrate redo"
   },
   "keywords": [],
   "author": "",
@@ -13,11 +18,16 @@
   "dependencies": {
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.6",
+    "@types/node-pg-migrate": "^2.3.1",
     "@types/pg": "^8.20.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "node-pg-migrate": "^8.0.4",
     "nodemon": "^3.1.14",
     "pg": "^8.22.0",
     "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2"
   }
 }

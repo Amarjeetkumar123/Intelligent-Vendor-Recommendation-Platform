@@ -16,4 +16,4 @@ async function connectDatabase() {
     }
 }
 
-export default connectDatabase;
+export { connectDatabase, pool };
