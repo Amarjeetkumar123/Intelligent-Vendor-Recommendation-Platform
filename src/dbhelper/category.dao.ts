@@ -16,11 +16,11 @@ const buildWhereClause = <T extends object>(filters: T) => {
 
 export const saveCategory = async (categoryDetails: Category): Promise<Category> => {
     const queryText = `
-        INSERT INTO categories (name)
-        VALUES ($1)
+        INSERT INTO categories (name, description)
+        VALUES ($1, $2)
         RETURNING *
     `;
-    const result = await pool.query(queryText, [categoryDetails.name]);
+    const result = await pool.query(queryText, [categoryDetails.name, categoryDetails.description ?? null]);
     return result.rows[0];
 };
 

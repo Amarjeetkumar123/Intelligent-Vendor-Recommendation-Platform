@@ -13,8 +13,8 @@ import { Category } from '../models/index.js';
 
 export const createCategory = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const { name }: Category = req.body;
-        const category = await saveCategory({ name });
+        const { name, description }: Category = req.body;
+        const category = await saveCategory({ name, description });
         res.status(201).json({ success: true, data: category });
     } catch (error) {
         next(error);

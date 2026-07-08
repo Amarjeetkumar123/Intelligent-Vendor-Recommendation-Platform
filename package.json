@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --exec 'node --loader ts-node/esm' src/index.ts",
     "migrate:create": "node-pg-migrate create --migration-file-language=ts",
-    "migrate:up": "node-pg-migrate up",
-    "migrate:down": "node-pg-migrate down",
-    "migrate:redo": "node-pg-migrate redo"
+    "migrate:up": "node-pg-migrate up --tsconfig tsconfig.json",
+    "migrate:down": "node-pg-migrate down --tsconfig tsconfig.json",
+    "migrate:redo": "node-pg-migrate redo --tsconfig tsconfig.json"
   },
   "keywords": [],
   "author": "",

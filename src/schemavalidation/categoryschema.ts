@@ -1,11 +1,23 @@
 // ─── Category Schemas (AJV) ───────────────────────────────────────────────────
 
+const CATEGORY_NAME_ENUM = [
+    'ELECTRICAL',
+    'PLUMBING',
+    'CIVIL',
+    'HVAC',
+    'PAINTING',
+    'CARPENTRY',
+    'HOUSEKEEPING',
+    'SECURITY',
+];
+
 // ─── CREATE ───────────────────────────────────────────────────────────────────
 
 export const createCategorySchema: any = {
     type: 'object',
     properties: {
-        name: { type: 'string', minLength: 2, maxLength: 150 },
+        name:        { type: 'string', enum: CATEGORY_NAME_ENUM },
+        description: { type: 'string', maxLength: 500, nullable: true },
     },
     required: ['name'],
     additionalProperties: false,
@@ -16,7 +28,7 @@ export const createCategorySchema: any = {
 export const updateCategorySchema: any = {
     type: 'object',
     properties: {
-        name: { type: 'string', minLength: 2, maxLength: 150, nullable: true },
+        description: { type: 'string', maxLength: 500, nullable: true },
     },
     required: [],
     additionalProperties: false,
@@ -27,7 +39,8 @@ export const updateCategorySchema: any = {
 export const queryCategorySchema: any = {
     type: 'object',
     properties: {
-        name: { type: 'string', maxLength: 150, nullable: true },
+        name:        { type: 'string', enum: CATEGORY_NAME_ENUM, nullable: true },
+        description: { type: 'string', maxLength: 500, nullable: true },
     },
     required: [],
     additionalProperties: false,
