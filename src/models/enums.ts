@@ -5,7 +5,9 @@ export type VendorType =
     | 'CONSULTANT'
     | 'CONTRACTOR'
     | 'SUPPLIER'
-    | 'SERVICE_PROVIDER';
+    | 'SERVICE_PROVIDER'
+    | 'MANUFACTURER'
+    | 'DISTRIBUTOR';
 
 export type DocumentType =
     | 'TAX_REGISTRATION'

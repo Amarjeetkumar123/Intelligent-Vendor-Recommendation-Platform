@@ -1,6 +1,6 @@
 // ─── Vendor Schemas (AJV) ─────────────────────────────────────────────────────
 
-const VENDOR_TYPE_ENUM = ['INDIVIDUAL', 'CONSULTANT', 'CONTRACTOR', 'SUPPLIER', 'SERVICE_PROVIDER'];
+const VENDOR_TYPE_ENUM = ['INDIVIDUAL', 'CONSULTANT', 'CONTRACTOR', 'SUPPLIER', 'SERVICE_PROVIDER', 'MANUFACTURER', 'DISTRIBUTOR'];
 
 // ─── CREATE ───────────────────────────────────────────────────────────────────
 
