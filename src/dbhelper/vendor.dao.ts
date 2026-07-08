@@ -17,8 +17,8 @@ const buildWhereClause = <T extends object>(filters: T) => {
 export const saveVendor = async (vendorDetails: Vendor): Promise<Vendor> => {
     const queryText = `
         INSERT INTO vendors
-            (name, vendor_type, category_id, email, mobile_number, rating, address, city, state, pincode)
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            (name, vendor_type, category_id, email, mobile_number, rating, address, city, state, pincode, vendor_status)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
         RETURNING *
     `;
     const values = [
@@ -32,6 +32,7 @@ export const saveVendor = async (vendorDetails: Vendor): Promise<Vendor> => {
         vendorDetails.city ?? null,
         vendorDetails.state ?? null,
         vendorDetails.pincode ?? null,
+        vendorDetails.vendor_status ?? 'ACTIVE',
     ];
     const result = await pool.query(queryText, values);
     return result.rows[0];

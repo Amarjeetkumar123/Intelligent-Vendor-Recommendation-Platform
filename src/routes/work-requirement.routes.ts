@@ -5,6 +5,7 @@ import {
     queryWorkRequirementById,
     updateWorkRequirementById,
     deleteWorkRequirementById,
+    recommendVendors,
 } from '../services/work-requirementservice.js';
 import {
     validateCreateWorkRequirementSchema,
@@ -28,5 +29,8 @@ router.put('/:id', validateUpdateWorkRequirementSchema, updateWorkRequirementByI
 
 // DELETE /work-requirements/:id      → delete work requirement
 router.delete('/:id', deleteWorkRequirementById);
+
+// POST /work-requirements/:id/recommend → recommend vendors for a work requirement
+router.get('/:id/recommend', recommendVendors);
 
 export default router;

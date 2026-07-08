@@ -1,7 +1,7 @@
 // ─── Vendor Model ─────────────────────────────────────────────────────────────
 // Mirrors the `vendors` table in the database
 
-import { VendorType } from './enums.js';
+import { VendorType, VendorStatus } from './enums.js';
 
 export interface Vendor {
     id?: number;
@@ -15,6 +15,7 @@ export interface Vendor {
     city?: string | null;
     state?: string | null;
     pincode?: string | null;
+    vendor_status?: VendorStatus;
     created_at?: Date;
     updated_at?: Date;
 }

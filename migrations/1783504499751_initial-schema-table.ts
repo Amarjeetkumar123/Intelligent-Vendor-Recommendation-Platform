@@ -34,12 +34,6 @@ export const up = (pgm: MigrationBuilder): void => {
         'AGREEMENT',
     ]);
 
-    pgm.createType('vendor_status', [
-        'ACTIVE',
-        'INACTIVE',
-        'SUSPENDED',
-    ]);
-
     // ─── TABLE 1: vendors ────────────────────────────────────────────────────────
 
     pgm.createTable('vendors', {
@@ -59,7 +53,6 @@ export const up = (pgm: MigrationBuilder): void => {
         city: { type: 'varchar(100)' },
         state: { type: 'varchar(100)' },
         pincode: { type: 'varchar(20)' },
-        vendor_status: { type: 'varchar(20)' },
         
         created_at: {
             type: 'timestamp',
@@ -163,7 +156,6 @@ export const down = (pgm: MigrationBuilder): void => {
     pgm.dropTable('categories');
     pgm.dropType('priority_level');
     pgm.dropType('document_type');
-    pgm.dropType('vendor_status');
     pgm.dropType('vendor_type');
 };
 
